@@ -4,6 +4,6 @@ Single page, local web application, to tag, analyze,... metadata from a salesfor
 Installation
 - download graph library https://github.com/mdaines/viz.js/releases/tag/v2.1.2
 - Put it in same folder as mamet.html and mametui.js
-- Run sfdx plugins mamet:genmets and mamet:genstats
+- Run sfdx plugins mamet:genmets and mamet:genstats that creates files mametMD.js and mametST.js
 
 double click on mamet.html
