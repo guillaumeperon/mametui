@@ -41,6 +41,19 @@ class Cmpinfo {
         this.shape = "rect";
         this.hidden = false;
     }
+    // 
+    get usePict() {
+        //console.log( JSON.stringify(anode));
+        var useTag = "&#10060 "; // not used
+        if (this.active) {
+            useTag = "&#9989 "; // in use
+        }
+        else {
+            if (this.createdDate > confPane.youngDev)
+                useTag = "&#9997 "; // in development
+        }
+        return useTag;
+    }
     // generate graphviz node description
     gvNode() {
         // if (!nodeFilter(nd)) continue; // choose to display or not with filter class
@@ -536,7 +549,7 @@ class CmpListPane {
             }
             else
                 for (let anode of allClusters[clustername].map(m => macomps[m]))
-                    clelts.push(this.useLogo(anode) + anode.cmptype + " " + anode.cmpname);
+                    clelts.push(anode.usePict + anode.cmpname + " " + anode.cmptype);
             aclst.innerHTML = clelts.join("<br/>");
             aclst.addEventListener("click", function () { showCluster(clustername); });
             this.pComp.appendChild(aclst);
@@ -554,19 +567,10 @@ class CmpListPane {
         for (let anode of Object.values(macomps).filter(a => a.cmptype === ctype).sort((a, b) => (a.cmpname > b.cmpname) ? 1 : -1)) {
             let aclst = document.createElement('div');
             aclst.className = "mamcluster";
-            aclst.innerHTML = this.useLogo(anode) + anode.cmpname;
+            aclst.innerHTML = anode.usePict + anode.cmpname;
             aclst.setAttribute('sfid', anode.sfid);
             this.pComp.appendChild(aclst);
         }
-    }
-    useLogo(anode) {
-        //console.log( JSON.stringify(anode));
-        var useTag = "&#10060 "; // not used
-        if (anode.createdDate > confPane.youngDev)
-            useTag = "&#9997 "; // in development
-        if (anode.active)
-            useTag = "&#9989 "; // in use
-        return useTag;
     }
 }
 /*
@@ -711,8 +715,8 @@ class GraphPane {
     }
     refreshViewTable(gvNodes2, measures) {
         this.pDiv.innerHTML = `<table class="cmpList">
-		<thead><tr><th>type</th><th>id</th><th>name</th></tr></thead><tbody>
-  		${Object.values(gvNodes2).map(n => `<tr><td>${n.cmptype}</td><td>${n.sfid}</td><td>${n.cmpname}</td></tr>`).join("")}
+		<thead><tr><th>use</th><th>type</th><th>name</th><th>tags</th></tr></thead><tbody>
+  		${Object.values(gvNodes2).map(n => `<tr><td>${n.usePict}</td><td>${n.cmptype}</td><td>${n.cmpname}</td><td>${n.tags.join(", ")}</td></tr>`).join("")}
           </tbody></table>`;
     }
     async refreshViewGraph(gvNodes2, measures) {
